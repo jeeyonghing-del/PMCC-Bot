@@ -20,10 +20,8 @@ import pytz
 from tigeropen.tiger_open_config import TigerOpenClientConfig
 from tigeropen.trade.trade_client import TradeClient
 from tigeropen.quote.quote_client import QuoteClient
-from tigeropen.common.consts import Currency, Market, BarPeriod
-from tigeropen.trade.domain.order import (
-    market_order, limit_order
-)
+from tigeropen.common.util.order_utils import market_order, limit_order
+from tigeropen.common.util.contract_utils import option_contract_by_symbol
 
 # ── Logging setup ─────────────────────────────────────────────────────────────
 logging.basicConfig(
@@ -102,12 +100,11 @@ def send_telegram(message: str):
 
 def get_clients():
     """Initialise and return (trade_client, quote_client)."""
-    config = TigerOpenClientConfig()
+    config = TigerOpenClientConfig(sandbox_debug=False)
     config.tiger_id    = TIGER_ID
     config.account     = ACCOUNT
     config.private_key = PRIVATE_KEY
     config.license     = LICENSE
-    config.is_sandbox  = False
     return TradeClient(config), QuoteClient(config)
 
 
